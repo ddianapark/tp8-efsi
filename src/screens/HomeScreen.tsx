@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/StackNavigator';
 import { CatPost, Story } from '../types';
 import PostCard from '../components/PostCard';
 import StoryCircle from '../components/StoryCircle';
+import * as apiCalls from '../../services/apiCalls';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -24,39 +24,35 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
   const fetchData = async () => {
     try {
-      // Traemos 15 gatos (Mínimo requerido de 10)
-      const response = await axios.get('https://api.thecatapi.com/v1/images/search?limit=15');
-      
-      // Mapeamos los gatos inyectando los datos de tus capturas web
-      const formattedPosts: CatPost[] = response.data.map((item: any, index: number) => ({
-        id: item.id,
-        url: item.url,
-        username: `cat_${item.id.slice(0, 4).toLowerCase()}`,
-        avatar: `https://picsum.photos/id/${index + 10}/200`,
-        location: ['Buenos Aires, Argentina', 'Cat Land', 'Adoption Center', 'The Box'][index % 4],
-        likes: Math.floor(Math.random() * 5000) + 100,
-        caption: 'A cute cat presentation from my previous project! 🐾😻',
-        isLiked: false,
-        comments: [
-          { id: '1', username: 'ddianapark', text: 'Nice cat!' },
-          { id: '2', username: 'jazberlin', text: 'So cute!' },
-          { id: '3', username: 'ortalmagro', text: 'I want one!' }
-        ]
-      }));
+      Promise.all([
+        apiCalls.getCats(9),
+        apiCalls.getCats(7)
+      ]).then(([catsForPosts, catsForStories]) => {
+        
+        const formattedPosts: CatPost[] = catsForPosts.map((cat: any, index: number) => ({
+          id: cat.id,
+          url: cat.url,
+          username: `cat_${cat.id.slice(0, 4).toLowerCase()}`,
+          avatar: cat.url,
+          location: ['Buenos Aires, Argentina', 'Cat Land', 'Adoption Center', 'The Box'][index % 4],
+          likes: Math.floor(Math.random() * 5000) + 100,
+          caption: 'A cute cat presentation from my previous project! 🐾😻',
+          isLiked: false,
+          comments: [
+            { id: '1', username: 'ddianapark', text: 'Nice cat!' },
+            { id: '2', username: 'jazberlin', text: 'So cute!' },
+            { id: '3', username: 'ortalmagro', text: 'I want one!' }
+          ]
+        }));
+        const formattedStories: Story[] = catsForStories.map((cat: any) => ({
+          id: cat.id as string,
+          username: (cat.breeds?.[0]?.name || `user_${cat.id}`) as string,
+          avatar: cat.url as string
+        }))
 
-      // Creamos la lista de stories exacta a tu mockup
-      const mockStories: Story[] = [
-        { id: 's1', username: 'user_354', avatar: 'https://placekitten.com/150/150' },
-        { id: 's2', username: 'user_3f6', avatar: 'https://placekitten.com/160/160' },
-        { id: 's3', username: 'user_7j4', avatar: 'https://placekitten.com/170/170' },
-        { id: 's4', username: 'user_aqc', avatar: 'https://placekitten.com/180/180' },
-        { id: 's5', username: 'user_ctp', avatar: 'https://placekitten.com/190/190' },
-        { id: 's6', username: 'user_d54', avatar: 'https://placekitten.com/200/200' },
-        { id: 's7', username: 'Persian', avatar: 'https://placekitten.com/210/210' },
-      ];
-
-      setPosts(formattedPosts);
-      setStories(mockStories);
+        setPosts(formattedPosts)
+        setStories(formattedStories)
+      })
     } catch (error) {
       console.error('Error fetching data from Cat API:', error);
     } finally {
@@ -74,7 +70,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         renderItem={({ item }) => <StoryCircle item={item} />}
         contentContainerStyle={styles.storiesList}
       />
-      {/* Botón rápido para ir al Perfil emulado de Manon como pide el TP */}
       <TouchableOpacity 
         style={styles.profileNavButton} 
         onPress={() => navigation.navigate('Profile')}

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/StackNavigator';
+import { Feather } from '@expo/vector-icons';
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'Detail'>;
 
@@ -33,8 +34,17 @@ export default function DetailScreen({ route }: DetailScreenProps) {
 
         {/* Acciones */}
         <View style={styles.actions}>
-          <TouchableOpacity onPress={handleLike}>
-            <Text style={styles.icon}>{liked ? '❤️' : '🤍'}</Text>
+          {/* Botón de Like */}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={handleLike}
+            style={styles.actionButton}
+          >
+            <Feather
+              name="heart"
+              size={22}
+              color={liked ? '#ff3040' : '#000000'} // Cambia a rojo si está activo
+            />
           </TouchableOpacity>
           <Text style={styles.likesText}>{likesCount.toLocaleString()} Me gusta</Text>
         </View>
@@ -126,5 +136,8 @@ const styles = StyleSheet.create({
   },
   commentText: {
     fontSize: 13,
+  },
+  actionButton: {
+    marginRight: 15,
   },
 });

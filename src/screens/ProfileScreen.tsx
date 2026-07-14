@@ -1,29 +1,47 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, FlatList, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
+import * as apiCalls from '../../services/apiCalls';
+import { CatPost } from '../types';
 
 const { width } = Dimensions.get('window');
 const itemSize = width / 3;
 
-// Simulamos las imágenes de gatos que Manon tiene publicadas
-const mockProfilePosts = [
-  { id: 'p1', url: 'https://placekitten.com/300/300' },
-  { id: 'p2', url: 'https://placekitten.com/301/301' },
-  { id: 'p3', url: 'https://placekitten.com/302/302' },
-  { id: 'p4', url: 'https://placekitten.com/303/303' },
-  { id: 'p5', url: 'https://placekitten.com/304/304' },
-  { id: 'p6', url: 'https://placekitten.com/305/305' },
-  { id: 'p7', url: 'https://placekitten.com/306/306' },
-  { id: 'p8', url: 'https://placekitten.com/307/307' },
-  { id: 'p9', url: 'https://placekitten.com/308/308' },
-];
-
 export default function ProfileScreen() {
+  const [posts, setPosts] = useState<CatPost[]>([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    Promise.all([
+      apiCalls.getCats(9)
+    ]).then(([cats]) => {
+      const formattedPosts: CatPost[] = cats.map((cat: any, index: number) => ({
+        id: cat.id,
+        url: cat.url,
+        username: `manon`,
+        avatar: require('../../assets/manon.jpg'),
+        location: ['Buenos Aires, Argentina', 'Cat Land', 'Adoption Center', 'The Box'][index % 4],
+        likes: Math.floor(Math.random() * 5000) + 100,
+        caption: 'A cute cat presentation from my previous project! 🐾😻',
+        isLiked: false,
+        comments: [
+          { id: '1', username: 'ddianapark', text: 'Nice cat!' },
+          { id: '2', username: 'jazberlin', text: 'So cute!' },
+          { id: '3', username: 'ortalmagro', text: 'I want one!' }
+        ]
+      }));
+      setPosts(formattedPosts);
+    });
+  }
+
   const renderHeader = () => (
     <View style={styles.headerContainer}>
       {/* Fila Principal de Info */}
       <View style={styles.profileRow}>
         <Image 
-          source={{ uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200' }} // Avatar similar a tu captura
+          source={require('../../assets/manon.jpg')}
           style={styles.profilePic} 
         />
         <View style={styles.statsContainer}>
@@ -66,7 +84,7 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={mockProfilePosts}
+        data={posts}
         keyExtractor={(item) => item.id}
         numColumns={3} // Requisito mandatorio del TP
         ListHeaderComponent={renderHeader}

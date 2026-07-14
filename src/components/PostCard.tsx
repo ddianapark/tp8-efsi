@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { CatPost } from '../types';
+import PostActions from './PostActions';
 
 interface PostCardProps {
   post: CatPost;
@@ -37,21 +38,7 @@ export default function PostCard({ post, onPressImage }: PostCardProps) {
       </TouchableOpacity>
 
       {/* Barra de Acciones */}
-      <View style={styles.actionsBar}>
-        <View style={styles.leftActions}>
-          <TouchableOpacity onPress={handleLike} style={styles.actionButton}>
-            <Text style={[styles.iconText, liked && styles.likedIcon]}>
-              {liked ? '❤️' : '🤍'}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onPressImage} style={styles.actionButton}>
-            <Text style={styles.iconText}>💬</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
-            <Text style={styles.iconText}>✈️</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <PostActions />
 
       {/* Información Inferior */}
       <View style={styles.footer}>
