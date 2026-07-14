@@ -1,43 +1,61 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
-import DetailScreen from '../screens/DetailScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import { CatPost } from '../types';
+import Logo from '../components/icons/Logo';
+import NotificationsIcon from '../components/icons/NotificationsIcon';
+import MessagesIcon from '../components/icons/MessagesIcon';
 
-export type RootStackParamList = {
-  Home: undefined;
-  Detail: { post: CatPost };
-  Profile: undefined;
-};
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator();
 
 export default function StackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="Home"
       screenOptions={{
-        headerStyle: { backgroundColor: '#fff' },
-        headerTintColor: '#000',
-        headerTitleStyle: { fontWeight: 'bold' },
-        contentStyle: { backgroundColor: '#fff' },
+        headerStyle: styles.header,
+        headerShadowVisible: false,
       }}
     >
       <Stack.Screen 
         name="Home" 
         component={HomeScreen} 
-        options={{ title: 'Instagram' }} 
-      />
-      <Stack.Screen 
-        name="Detail" 
-        component={DetailScreen} 
-        options={{ title: 'Publicación' }} 
-      />
-      <Stack.Screen 
-        name="Profile" 
-        component={ProfileScreen} 
-        options={{ title: 'Perfil' }} 
+        options={() => ({
+          headerLeft: () => (
+            <View style={styles.logoContainer}>
+              <Logo />
+            </View>
+          ),
+          headerTitle: '',
+          headerRight: () => (
+            <View style={styles.rightIconsContainer}>
+              <TouchableOpacity style={styles.iconButton}>
+                <NotificationsIcon />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.iconButton}>
+                <MessagesIcon />
+              </TouchableOpacity>
+            </View>
+          ),
+        })}
       />
     </Stack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: '#fff',
+  },
+  logoContainer: {
+    paddingLeft: 10,
+  },
+  rightIconsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: 10,
+  },
+  iconButton: {
+    marginLeft: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

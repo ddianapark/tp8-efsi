@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { CatPost } from '../types';
 import PostActions from './PostActions';
 
@@ -9,17 +9,7 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post, onPressImage }: PostCardProps) {
-  const [liked, setLiked] = useState(post.isLiked);
   const [likesCount, setLikesCount] = useState(post.likes);
-
-  const handleLike = () => {
-    if (liked) {
-      setLikesCount(likesCount - 1);
-    } else {
-      setLikesCount(likesCount + 1);
-    }
-    setLiked(!liked);
-  };
 
   return (
     <View style={styles.container}>
@@ -33,12 +23,15 @@ export default function PostCard({ post, onPressImage }: PostCardProps) {
       </View>
 
       {/* Imagen Principal (Navega al detalle al tocarla) */}
-      <TouchableOpacity activeOpacity={0.9} onPress={onPressImage}>
-        <Image source={{ uri: post.url }} style={styles.postImage} />
-      </TouchableOpacity>
+     <TouchableOpacity activeOpacity={0.9} onPress={onPressImage}>
+        <Image 
+          source={{ uri: post.url }} 
+          style={styles.postImage}
+        />
+    </TouchableOpacity>
 
       {/* Barra de Acciones */}
-      <PostActions />
+      <PostActions likesCount={likesCount} setLikesCount={setLikesCount} />
 
       {/* Información Inferior */}
       <View style={styles.footer}>
@@ -79,31 +72,9 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#666',
   },
-  postImage: {
-    width: '100%',
-    height: 380,
-    resizeMode: 'cover',
-  },
-  actionsBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-  },
-  leftActions: {
-    flexDirection: 'row',
-  },
-  actionButton: {
-    marginRight: 15,
-  },
-  iconText: {
-    fontSize: 20,
-  },
-  likedIcon: {
-    transform: [{ scale: 1.1 }],
-  },
   footer: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
+    paddingBottom: 10,
   },
   likesText: {
     fontWeight: 'bold',
@@ -116,5 +87,9 @@ const styles = StyleSheet.create({
   },
   usernameCaption: {
     fontWeight: 'bold',
+  },
+  postImage: {
+    width: '100%',
+    height: 380,
   },
 });

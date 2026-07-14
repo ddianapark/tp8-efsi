@@ -2,26 +2,28 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, FlatList, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
 import * as apiCalls from '../../services/apiCalls';
 import { CatPost } from '../types';
+import Loader from '../components/Loader';
 
 const { width } = Dimensions.get('window');
 const itemSize = width / 3;
 
 export default function ProfileScreen() {
   const [posts, setPosts] = useState<CatPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  function fetchData() {
-    Promise.all([
-      apiCalls.getCats(9)
-    ]).then(([cats]) => {
-      const formattedPosts: CatPost[] = cats.map((cat: any, index: number) => ({
+  const fetchData = async () => {
+    try {
+      const [catsForPosts] = await Promise.all([ apiCalls.getCats(9) ]);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const formattedPosts: CatPost[] = catsForPosts.map((cat: any, index: number) => ({
         id: cat.id,
         url: cat.url,
-        username: `manon`,
-        avatar: require('../../assets/manon.jpg'),
+        username: `cat_${cat.id.slice(0, 4).toLowerCase()}`,
+        avatar: cat.url,
         location: ['Buenos Aires, Argentina', 'Cat Land', 'Adoption Center', 'The Box'][index % 4],
         likes: Math.floor(Math.random() * 5000) + 100,
         caption: 'A cute cat presentation from my previous project! 🐾😻',
@@ -32,9 +34,13 @@ export default function ProfileScreen() {
           { id: '3', username: 'ortalmagro', text: 'I want one!' }
         ]
       }));
-      setPosts(formattedPosts);
-    });
-  }
+      setPosts(formattedPosts)
+    } catch (error) {
+      console.error('Error fetching data from Cat API:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const renderHeader = () => (
     <View style={styles.headerContainer}>
@@ -81,12 +87,20 @@ export default function ProfileScreen() {
     </View>
   );
 
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Loader />
+      </View>
+    );
+  }
+  
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}
-        numColumns={3} // Requisito mandatorio del TP
+        numColumns={3}
         ListHeaderComponent={renderHeader}
         renderItem={({ item }) => (
           <Image source={{ uri: item.url }} style={styles.gridImage} />
@@ -100,6 +114,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerContainer: {
     padding: 15,

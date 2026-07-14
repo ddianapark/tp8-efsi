@@ -1,60 +1,15 @@
-| Clon Móvil de Instagram con React Native y Expo
-| Objetivo del Trabajo Práctico
-El objetivo de este proyecto es migrar y evolucionar la lógica desarrollada en el trabajo práctico anterior (Instagram Web en React) hacia React Native bajo el ecosistema de Expo. Los estudiantes deberán replicar de la forma más fiel posible la interfaz de la aplicación móvil de Instagram, consumiendo datos dinámicos en tiempo real desde una API externa de imágenes de gatos (The Cat API o Cataas) o cualquier otra API que proporcione imágenes, para simular los posteos del feed.
-
-
-Resultados de Aprendizaje Esperados:
-
-Configuración e inicialización de proyectos mediante Expo CLI.
-Implementación de la arquitectura de enrutado.
-Maquetado adaptativo y fluido para pantallas de celulares utilizando Flexbox y StyleSheet.
-Optimización crítica de listas de datos masivas mediante el uso de FlatList.
-Consumo asincrónico de APIs con Axios y persistencia en estados locales a través de React Hooks.
-Configuración avanzada de elementos del sistema como la StatusBar y la SplashScreen.
-| Diseño Obligatorio y Referencias
-La aplicación móvil desarrollada debe respetar rigurosamente la estética, proporciones, paleta de colores e iconografía de la aplicación oficial de Instagram para dispositivos móviles. Los alumnos podrán guiarse directamente observando mockups en la comunidad de Figma como referencia técnica.
-
-
 IMPORTANTE: En la entrega final, es mandatorio adjuntar el enlace al archivo de Figma o, en su defecto, las capturas de pantalla exactas que sirvieron como guía visual. Se evaluará con especial énfasis la fidelidad visual, la simetría y el cuidado en los espaciados, márgenes y paddings.
-
-| Requisitos Técnicos y de Estructura
-Arquitectura de Rutas y Navegación
-Toda la estructura de navegación de la aplicación deberá implementarse utilizando React Navigation dentro del proyecto React Native.
-
-La aplicación deberá contar con una navegación principal correctamente organizada, permitiendo el acceso a las distintas pantallas definidas para el flujo de usuario.
-La navegación desde la vista principal hacia el detalle de un posteo deberá resolverse mediante un Stack Navigator o mediante la presentación de una pantalla modal, asegurando el envío y recepción de parámetros de navegación de forma clara y adecuada.
-La organización de los navegadores deberá seguir una estructura modular y mantenible, separando correctamente las pantallas y configuraciones de navegación dentro del proyecto.
-Identidad del Sistema y Adaptabilidad
-SplashScreen: Se debe reemplazar la pantalla de carga por defecto de Expo por una imagen con el logotipo de la aplicación optimizado.
-Icono de la Aplicación: Se debe configurar el icono nativo para que se visualice correctamente en el box o escritorio del sistema operativo móvil.
-StatusBar: Debe ser estilizada (Light/Dark) asegurando un contraste legible con la cabecera de la aplicación.
-SafeAreaView: Se debe envolver la estructura jerárquica de cada vista en este componente protector para asegurar que los elementos esenciales no colisionen con los notches, islas dinámicas o barras físicas del dispositivo.
-Consumo de API y Feed Principal (Home)
-Se requiere realizar la petición asíncrona hacia la API seleccionada mediante Axios dentro de un ciclo controlado por el hook useEffect al renderizar la app por primera vez. Se deberán traer y mapear un mínimo de 10 elementos distintos.
-Restricción Crítica de Rendimiento: Queda estrictamente prohibido renderizar el feed utilizando contenedores genéricos de scroll con métodos lineales como .map(). Es obligatorio implementar el componente nativo FlatList.
-Cada ítem renderizado por la lista debe ser un componente modular reutilizable que reciba la información por props e incluya: Avatar e ID de usuario, localización simulada, imagen del gato, barra interactiva de acciones (Me gusta, Comentar, Compartir), contador numérico de Me Gusta y el pie del posteo (caption).
-Vista Extendida y Detalle del Post
-Al ejecutar un evento de presión sobre un ítem del feed o sobre la cuadrícula del perfil, la aplicación redirigirá al usuario hacia la vista extendida del elemento elegido. La vista debe capturar y procesar el identificador o el objeto completo para renderizar la imagen en alta definición, un listado simulado de comentarios, etiquetas adicionales y una interacción funcional en tiempo real empleando useState (ej: cambiar el color y estado del botón de "Me gusta" e incrementar de inmediato el contador en pantalla).
-
-Perfil de Usuario Emulado
-Vista dedicada a la representación visual del perfil activo del usuario (no requiere proceso de registro ni login real).
-
-Debe mostrar la información clásica de un perfil de red social: imagen de avatar, nombre descriptivo, biografía corta, métricas dinámicas (Publicaciones, Seguidores, Seguidos) y un botón visual para editar perfil.
-Cuadrícula de Imágenes: El portafolio de fotos inferiores debe ser diseñado empleando una FlatList configurada con la propiedad nativa numColumns = 3 para lograr la visualización exacta en tres columnas simétricas sin desbordamiento de pantalla.
 
 | Archivo de Documentación Obligatorio (README.md)
 El repositorio deberá poseer un archivo formal de documentación técnica escrito en formato Markdown que desglose de manera pormenorizada:
-
 La jerarquía de archivos y el árbol de directorios implementado dentro de la carpeta app/.
 Un desglose técnico detallado que justifique conceptualmente la existencia de cada componente atómico creado y la forma en que heredan datos mediante las props.
 La declaración exacta de qué estados se manejan a nivel global o local mediante hooks.
 Enlace directo al diseño de Figma utilizado o capturas equivalentes de la referencia elegida.
 
-|  Checklist de Requisitos Mínimos
+| Checklist de Requisitos Mínimos
 ☐ Barra de navegación nativa superior.
-☐ Feed dinámico estructurado exclusivamente a través de un componente FlatList de rendimiento optimizado.
 ☐ Mapeo de al menos 10 registros de imágenes asíncronas provistas por la API mediante Axios.
-☐ Uso exclusivo de StyleSheet.create() para el modelado visual de todos los contenedores y textos.
 ☐ Interacciones táctiles aplicadas usando componentes específicos como TouchableOpacity o Pressable.
 ☐ Flujo de navegación completo y funcional: Feed → Detalle de Publicación → Perfil.
 ☐ Diseño en cuadrícula perfecta de 3 columnas para el mosaico del perfil personal.

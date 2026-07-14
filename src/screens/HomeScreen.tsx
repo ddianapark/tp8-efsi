@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList, ActivityIndicator, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator, Text, TouchableOpacity, SafeAreaView, DrawerLayoutAndroidBase } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/StackNavigator';
 import { CatPost, Story } from '../types';
 import PostCard from '../components/PostCard';
 import StoryCircle from '../components/StoryCircle';
 import * as apiCalls from '../../services/apiCalls';
+import Loader from '../components/Loader';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -24,35 +25,34 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
   const fetchData = async () => {
     try {
-      Promise.all([
+      const [catsForPosts, catsForStories] = await Promise.all([
         apiCalls.getCats(9),
         apiCalls.getCats(7)
-      ]).then(([catsForPosts, catsForStories]) => {
-        
-        const formattedPosts: CatPost[] = catsForPosts.map((cat: any, index: number) => ({
-          id: cat.id,
-          url: cat.url,
-          username: `cat_${cat.id.slice(0, 4).toLowerCase()}`,
-          avatar: cat.url,
-          location: ['Buenos Aires, Argentina', 'Cat Land', 'Adoption Center', 'The Box'][index % 4],
-          likes: Math.floor(Math.random() * 5000) + 100,
-          caption: 'A cute cat presentation from my previous project! 🐾😻',
-          isLiked: false,
-          comments: [
-            { id: '1', username: 'ddianapark', text: 'Nice cat!' },
-            { id: '2', username: 'jazberlin', text: 'So cute!' },
-            { id: '3', username: 'ortalmagro', text: 'I want one!' }
-          ]
-        }));
-        const formattedStories: Story[] = catsForStories.map((cat: any) => ({
-          id: cat.id as string,
-          username: (cat.breeds?.[0]?.name || `user_${cat.id}`) as string,
-          avatar: cat.url as string
-        }))
+      ]);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const formattedPosts: CatPost[] = catsForPosts.map((cat: any, index: number) => ({
+        id: cat.id,
+        url: cat.url,
+        username: `cat_${cat.id.slice(0, 4).toLowerCase()}`,
+        avatar: cat.url,
+        location: ['Buenos Aires, Argentina', 'Cat Land', 'Adoption Center', 'The Box'][index % 4],
+        likes: Math.floor(Math.random() * 5000) + 100,
+        caption: 'A cute cat presentation from my previous project! 🐾😻',
+        isLiked: false,
+        comments: [
+          { id: '1', username: 'ddianapark', text: 'Nice cat!' },
+          { id: '2', username: 'jazberlin', text: 'So cute!' },
+          { id: '3', username: 'ortalmagro', text: 'I want one!' }
+        ]
+      }));
+      const formattedStories: Story[] = catsForStories.map((cat: any) => ({
+        id: cat.id as string,
+        username: (cat.breeds?.[0]?.name || `user_${cat.id}`) as string,
+        avatar: cat.url as string
+      }))
 
-        setPosts(formattedPosts)
-        setStories(formattedStories)
-      })
+      setPosts(formattedPosts)
+      setStories(formattedStories)
     } catch (error) {
       console.error('Error fetching data from Cat API:', error);
     } finally {
@@ -82,7 +82,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   if (loading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#000" />
+        <Loader />
       </View>
     );
   }
