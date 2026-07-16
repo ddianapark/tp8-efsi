@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../navigation/StackNavigator';
 import { Feather } from '@expo/vector-icons';
 
-type DetailScreenRouteProp = RouteProp<RootStackParamList, 'Detail'>;
-
 interface DetailScreenProps {
-  route: DetailScreenRouteProp;
+  route: RouteProp<{ params: { post: any } }, 'params'>;
 }
 
 export default function DetailScreen({ route }: DetailScreenProps) {

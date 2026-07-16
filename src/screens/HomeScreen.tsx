@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList, ActivityIndicator, Text, TouchableOpacity, SafeAreaView, DrawerLayoutAndroidBase } from 'react-native';
+import { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, View, FlatList, Text, TouchableOpacity } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/StackNavigator';
 import { CatPost, Story } from '../types';
 import PostCard from '../components/PostCard';
 import StoryCircle from '../components/StoryCircle';
 import * as apiCalls from '../../services/apiCalls';
 import Loader from '../components/Loader';
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
-
 interface HomeScreenProps {
-  navigation: HomeScreenNavigationProp;
+  navigation: NativeStackNavigationProp<any, 'HomeScreen'>;
 }
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
@@ -72,7 +70,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       />
       <TouchableOpacity 
         style={styles.profileNavButton} 
-        onPress={() => navigation.navigate('Profile')}
+        onPress={() => navigation.navigate('ProfileScreen')}
       >
         <Text style={styles.profileNavButtonText}>Ver Perfil de @manon 👤</Text>
       </TouchableOpacity>
@@ -81,9 +79,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
   if (loading) {
     return (
-      <View style={styles.loaderContainer}>
-        <Loader />
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loaderContainer}>
+          <Loader />
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -92,10 +92,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 100 }}
         renderItem={({ item }) => (
           <PostCard 
             post={item} 
-            onPressImage={() => navigation.navigate('Detail', { post: item })} 
+            onPressImage={() => navigation.navigate('DetailScreen', { post: item })} 
           />
         )}
         ListHeaderComponent={renderHeader}

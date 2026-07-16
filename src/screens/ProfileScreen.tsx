@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, Text, View, Image, FlatList, Dimensions, TouchableOpacity } from 'react-native';
 import * as apiCalls from '../../services/apiCalls';
 import { CatPost } from '../types';
 import Loader from '../components/Loader';
@@ -89,9 +90,11 @@ export default function ProfileScreen() {
 
   if (loading) {
     return (
-      <View style={styles.loaderContainer}>
-        <Loader />
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loaderContainer}>
+          <Loader />
+        </View>
+      </SafeAreaView>
     );
   }
   

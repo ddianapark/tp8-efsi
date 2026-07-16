@@ -5,14 +5,22 @@ import SearchIcon from '../components/icons/SearchIcon';
 import ProfileIcon from '../components/icons/ProfileIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+// Vistas temporales rápidas para evitar crasheos
+const FakeScreen = ({ name }: { name: string }) => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+    <Text>{name} Screen 🚀</Text>
+  </View>
+);
+
 const Tab = createBottomTabNavigator();
+
 export default function BottomTabNavigator() {
   return (
     <Tab.Navigator
-      tabBar={({ state, descriptors, navigation }) => (
+      tabBar={({ state, navigation }) => (
         <View style={styles.floatingWrapper}>
           <View style={styles.tabBarContainer}>
             {state.routes.map((route, index) => {
@@ -62,9 +70,9 @@ export default function BottomTabNavigator() {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Reels" />
-      <Tab.Screen name="Messages" />
-      <Tab.Screen name="Search" />
+      <Tab.Screen name="Reels" children={() => <FakeScreen name="Reels" />} />
+      <Tab.Screen name="Messages" children={() => <FakeScreen name="Messages" />} />
+      <Tab.Screen name="Search" children={() => <FakeScreen name="Search" />} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
