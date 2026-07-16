@@ -1,13 +1,13 @@
 ## 🚀 Instrucciones de Instalación y Ejecución
 Seguí estos pasos para clonar, instalar las dependencias y ejecutar el proyecto en tu entorno local de desarrollo:
 
-1. **Instalar dependencias del proyecto:**
-   ```bash
+**1. Instalar dependencias del proyecto:**
+   ```
    npm i
    ```
 
-2. **Iniciar el servidor de desarrollo de Expo:**
-    ```bash
+**2. Iniciar el servidor de desarrollo de Expo:**
+    ```
     npm start
     ```
 
@@ -38,25 +38,27 @@ La estructura de la carpeta src/ (o la carpeta raíz de tu aplicación) se organ
     └── types.ts                   # Definiciones de tipos estáticos globales de TypeScript
 
 ## 🛠️ Desglose Técnico y Justificación de Componentes
-1. **PostCard.tsx**
-Justificación Conceptual: Representa la unidad atómica de información visual en el feed. Aislarlo en su propio archivo permite que el renderizado de la lista de posts en HomeScreen sea sumamente limpio y eficiente, evitando re-renders innecesarios en la pantalla principal.
+**1. PostCard.tsx**
 
-Flujo de Props:
+_Justificación Conceptual:_ Representa la unidad atómica de información visual en el feed. Aislarlo en su propio archivo permite que el renderizado de la lista de posts en HomeScreen sea sumamente limpio y eficiente, evitando re-renders innecesarios en la pantalla principal.
+
+_Flujo de Props:_
 - post: Objeto de tipo CatPost con los datos específicos (URL, nombre de usuario, descripción, comentarios, likes).
 - onPressImage: Función de callback que se ejecuta al presionar la imagen para gatillar la navegación hacia DetailScreen.
 
-2. **StoryCircle.tsx**
-Justificación Conceptual: Componente circular que contiene la foto de perfil y el nombre de usuario de las historias activas. Centraliza el diseño del borde de gradiente clásico de las stories.
+**2. StoryCircle.tsx**
 
-Flujo de Props:
+_Justificación Conceptual:_ Componente circular que contiene la foto de perfil y el nombre de usuario de las historias activas. Centraliza el diseño del borde de gradiente clásico de las stories.
 
-item: Datos de tipo Story que contienen el identificador, la URL del avatar y el nombre del usuario.
+_Flujo de Props:_
+- item: Datos de tipo Story que contienen el identificador, la URL del avatar y el nombre del usuario.
 
-3. **Loader.tsx**
-Justificación Conceptual: Un spinner de carga reutilizable para estandarizar el "Feedback visual de espera" en las llamadas asíncronas de la API, tanto en la pantalla de inicio como en la pantalla de perfil.
+**3. Loader.tsx**
 
-4. **Icons (HomeIcon, ProfileIcon, etc.)**
-Justificación Conceptual: Componentes SVG puros que eliminan la dependencia de paquetes pesados de íconos. Al recibir props: React.SVGProps<SVGSVGElement>, heredan dinámicamente propiedades del contenedor padre, facilitando variaciones de tamaño o color para estados activos/inactivos.
+_Justificación Conceptual:_ Un spinner de carga reutilizable para estandarizar el "Feedback visual de espera" en las llamadas asíncronas de la API, tanto en la pantalla de inicio como en la pantalla de perfil.
+
+**4. Icons (HomeIcon, ProfileIcon, etc.)**
+_Justificación Conceptual:_ Componentes SVG puros que eliminan la dependencia de paquetes pesados de íconos. Al recibir props: React.SVGProps<SVGSVGElement>, heredan dinámicamente propiedades del contenedor padre, facilitando variaciones de tamaño o color para estados activos/inactivos.
 
 ## 🔄 Declaración de Gestión de Estados y Hooks
 La aplicación hace un uso estratégico de estados locales utilizando el hook nativo de React, garantizando que cada pantalla y componente sea autónomo y mantenga un alto rendimiento:
