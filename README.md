@@ -34,8 +34,9 @@ La estructura de la carpeta src/ (o la carpeta raíz de tu aplicación) se organ
     │   ├── ReelsScreen.tsx        # Sección de vídeos cortos (Simulada)
     │   └── SearchScreen.tsx       # Buscador de la aplicación (Simulada)
     ├── services/                  # Consumo de APIs externas e integraciones
-    │   └── apiCalls.ts            # Configuración y llamadas a "The Cat API"
-    └── types.ts                   # Definiciones de tipos estáticos globales de TypeScript
+    |   ├── api.ts                 # Conexión a "The Cat API" con Axios
+    │   └── apiCalls.ts            # Llamadas a "The Cat API"
+    └── types/                     # Definiciones de tipos estáticos globales de TypeScript
 
 ## 🛠️ Desglose Técnico y Justificación de Componentes
 **1. PostCard.tsx**
